@@ -19,6 +19,23 @@ import wzLogo from "/wz_logo.png";
 
 const LAST_UPDATED = "27 May 2025";
 
+const ENGAGING_MESSAGES = [
+  "Hey there! Ready to conquer some dungeons? 💪",
+  "These bosses? Cooked. 🍳",
+  "You’re eatin’ these dungeons for breakfast! 🥞",
+  "Yo, the bosses don’t even know what hit ‘em! 💥",
+  "Another one? Already? Bro, you’re wild. 🔥",
+  "They thought they had a chance—nah, they’re toast! 🍞",
+  "You’re rollin’ through like a wrecking ball! 🏗️",
+  "Bosses lookin’ like they need a break. 💀",
+  "You’re snackin’ on these dungeons like chips! 🥔",
+  "They shoulda stayed home, you’re too cold! 🥶",
+  "Man, you’re turning these dungeons into a highlight reel! 🎥",
+  "You're crushing it! More dungeons await! ⚔️",
+  "Dungeons don't stand a chance against you! 🛡️",
+  "You're on fire! Nothing can stop you now! 🔥",
+];
+
 type DungeonState = {
   normal: boolean;
   challenged: boolean;
@@ -100,6 +117,18 @@ export default function App() {
   });
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentMessage, setCurrentMessage] = useState(ENGAGING_MESSAGES[0]);
+  const [showChad, setShowChad] = useState(true);
+  const [currentChadImage, setCurrentChadImage] = useState(1);
+
+  // Add effect for initial show/hide
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowChad(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []); // Run only once on mount
 
   // Save checklist changes
   useEffect(() => {
@@ -134,10 +163,19 @@ export default function App() {
     localStorage.setItem("confettiEnabled", confettiEnabled.toString());
   }, [confettiEnabled]);
 
-  // Simple confetti trigger
+  // Modify triggerCelebration to include showing chad and random image
   const triggerCelebration = () => {
     if (confettiEnabled) {
       setShowConfetti(true);
+      // Select random message
+      const randomIndex = Math.floor(Math.random() * ENGAGING_MESSAGES.length);
+      setCurrentMessage(ENGAGING_MESSAGES[randomIndex]);
+      // Randomly select chad image (1 or 2)
+      setCurrentChadImage(Math.random() < 0.5 ? 1 : 2);
+      // Show chad with new message
+      setShowChad(true);
+      // Hide after 7 seconds
+      setTimeout(() => setShowChad(false), 7000);
       setTimeout(() => setShowConfetti(false), 6000);
     }
   };
@@ -282,7 +320,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 relative">
       {showConfetti && (
         <Confetti
           style={{
@@ -1060,6 +1098,57 @@ export default function App() {
         </p>
         <p className="text-left">Last updated: {LAST_UPDATED}</p>
       </footer>
+
+      <div
+        className="hidden sm:block fixed bottom-0 right-0 z-[99] pointer-events-none transition-all duration-500"
+        style={{
+          transform: showChad ? "translateY(0)" : "translateY(200%)",
+        }}
+      >
+        <div className="relative">
+          {/* Speech Bubble */}
+          <div className="absolute bottom-[100%] right-[20%] bg-white dark:bg-gray-800 rounded-lg p-3 shadow-lg border border-gray-200 dark:border-gray-700 max-w-[200px] animate-fade-in-up z-[10]">
+            <div className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+              {currentMessage}
+            </div>
+            {/* Speech bubble triangle */}
+            <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700 transform rotate-45"></div>
+          </div>
+          {/* Chad Image with animation */}
+          <img
+            src={`/chad-${currentChadImage}.webp`}
+            alt="chad"
+            className="w-full h-auto animate-slide-up"
+          />
+        </div>
+      </div>
+
+      {/* Add animation keyframes */}
+      <style>
+        {`
+          @keyframes slide-up {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(0); }
+          }
+          @keyframes fade-in-up {
+            0% { 
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            100% { 
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-slide-up {
+            animation: slide-up 0.8s ease-out forwards;
+          }
+          .animate-fade-in-up {
+            animation: fade-in-up 0.5s ease-out 0.3s forwards;
+            opacity: 0;
+          }
+        `}
+      </style>
     </div>
   );
 }
