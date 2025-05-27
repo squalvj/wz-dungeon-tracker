@@ -5,7 +5,7 @@ import { worldEvents } from "./data/worldEvents";
 import Confetti from "react-confetti";
 import {
   FaDungeon,
-  FaBroadcastTower,
+  FaChessRook,
   FaCalendarAlt,
   FaMoon,
   FaSun,
@@ -369,34 +369,35 @@ export default function App() {
 
       {/* Header */}
       <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white py-4 shadow-lg sticky top-0 z-50">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <div className="flex items-center gap-2 flex-1 min-w-0 justify-center">
-            <div className="flex flex-col items-start min-w-0 flex-1">
-              <img
-                src={wzLogo}
-                alt="World // Zero Logo"
-                className="h-8 md:h-10 object-contain flex-shrink-0"
-              />
-              <span className="mt-1 text-lg md:text-2xl font-bold tracking-tight truncate drop-shadow text-center">
-                Dungeon Tracker
-              </span>
-            </div>
+        <div className="container mx-auto flex items-center px-4">
+          {/* Logo/Title (left, grows) */}
+          <div className="flex flex-col items-start min-w-0 flex-1 justify-center mx-auto">
+            <img
+              src={wzLogo}
+              alt="World // Zero Logo"
+              className="h-8 md:h-10 object-contain flex-shrink-0"
+            />
+            <span className="mt-1 text-lg md:text-2xl font-bold tracking-tight truncate drop-shadow text-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text text-transparent">
+              Dungeon Tracker
+            </span>
           </div>
-          <div className="flex gap-2 flex-shrink-0">
+          {/* Right buttons (right) */}
+          <div className="flex gap-2 flex-shrink-0 items-center">
             <button
               onClick={resetAll}
-              className="bg-gradient-to-r from-red-500/30 to-red-600/30 px-3 py-1 rounded hover:from-red-500/40 hover:to-red-600/40 transition-all duration-300 flex items-center gap-1 text-sm md:text-base"
+              className="bg-gradient-to-r from-red-500/30 to-red-600/30 px-3 py-1 rounded hover:from-red-500/40 hover:to-red-600/40 transition-all duration-300 flex items-center gap-1 text-sm md:text-base hidden sm:flex"
             >
               <FaTrash className="text-sm md:text-base" />
               <span className="hidden sm:inline">Reset All</span>
             </button>
+            {/* Confetti and Dark Mode toggles: only show on desktop */}
             <button
               onClick={() => setConfettiEnabled(!confettiEnabled)}
               className={`${
                 confettiEnabled
                   ? "bg-gradient-to-r from-yellow-500/30 to-yellow-600/30 hover:from-yellow-500/40 hover:to-yellow-600/40"
                   : "bg-gradient-to-r from-gray-500/30 to-gray-600/30 hover:from-gray-500/40 hover:to-gray-600/40"
-              } px-3 py-1 rounded transition-all duration-300 flex items-center gap-1 text-sm md:text-base`}
+              } px-3 py-1 rounded transition-all duration-300 flex items-center gap-1 text-sm md:text-base hidden sm:flex`}
             >
               <FaFire className="text-sm md:text-base" />
               <span className="hidden sm:inline">
@@ -405,7 +406,7 @@ export default function App() {
             </button>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="bg-gradient-to-r from-white/30 to-white/40 px-3 py-1 rounded hover:from-white/40 hover:to-white/50 transition-all duration-300 flex items-center gap-1 text-sm md:text-base"
+              className="bg-gradient-to-r from-white/30 to-white/40 px-3 py-1 rounded hover:from-white/40 hover:to-white/50 transition-all duration-300 flex items-center gap-1 text-sm md:text-base hidden sm:flex"
             >
               {isDarkMode ? (
                 <FaSun className="text-sm md:text-base" />
@@ -415,6 +416,17 @@ export default function App() {
               <span className="hidden sm:inline">
                 {isDarkMode ? "Light Mode" : "Dark Mode"}
               </span>
+            </button>
+            {/* Hamburger (right, always visible on mobile) */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="sm:hidden text-white hover:text-gray-200 transition-colors flex-shrink-0 ml-2"
+            >
+              {isMobileMenuOpen ? (
+                <FaTimes className="text-2xl" />
+              ) : (
+                <FaBars className="text-2xl" />
+              )}
             </button>
           </div>
         </div>
@@ -426,7 +438,7 @@ export default function App() {
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-4">
+        <div className="p-4 flex flex-col h-full">
           <div className="flex justify-end">
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -435,7 +447,7 @@ export default function App() {
               <FaTimes className="text-2xl" />
             </button>
           </div>
-          <nav className="mt-8">
+          <nav className="mt-8 flex-1">
             <ul className="space-y-4">
               <li>
                 <button
@@ -451,7 +463,7 @@ export default function App() {
                   onClick={() => scrollToSection("towers-section")}
                   className="w-full text-left px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 dark:from-purple-900/20 dark:to-pink-900/20 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 text-white transition-all duration-300 flex items-center gap-2 text-lg"
                 >
-                  <FaBroadcastTower className="text-xl" />
+                  <FaChessRook className="text-xl" />
                   Towers
                 </button>
               </li>
@@ -465,15 +477,61 @@ export default function App() {
                 </button>
               </li>
             </ul>
+            <hr className="my-6 border-t border-gray-400 dark:border-gray-600 opacity-50" />
+            {/* Mobile-only toggles */}
+            <div className="mt-8 flex flex-col gap-3">
+              <button
+                onClick={resetAll}
+                className="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded hover:from-red-700 hover:to-red-600 transition-all duration-300 flex items-center gap-2 text-base"
+              >
+                <FaTrash className="text-base" />
+                Reset All
+              </button>
+              <button
+                onClick={() => setConfettiEnabled(!confettiEnabled)}
+                className={`bg-gradient-to-r ${
+                  confettiEnabled
+                    ? "from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
+                    : "from-gray-500 to-gray-700 hover:from-gray-600 hover:to-gray-800"
+                } text-white px-4 py-2 rounded transition-all duration-300 flex items-center gap-2 text-base`}
+              >
+                <FaFire className="text-base" />
+                {confettiEnabled ? "Confetti On" : "Confetti Off"}
+              </button>
+              <button
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white px-4 py-2 rounded hover:from-indigo-700 hover:to-indigo-900 transition-all duration-300 flex items-center gap-2 text-base"
+              >
+                {isDarkMode ? (
+                  <FaSun className="text-base" />
+                ) : (
+                  <FaMoon className="text-base" />
+                )}
+                {isDarkMode ? "Light Mode" : "Dark Mode"}
+              </button>
+            </div>
           </nav>
+          <footer className="mt-auto mb-2 text-xs text-gray-400 dark:text-gray-500 text-center select-none block sm:hidden">
+            Made with love{" "}
+            <span className="inline-block align-middle text-red-500">❤️</span>{" "}
+            by
+            <a
+              href="https://www.roblox.com/users/4956994994/profile"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 underline hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+              squalvj
+            </a>
+          </footer>
         </div>
       </div>
 
       {/* Main Content with Sidebar */}
       <div className="flex flex-1">
         {/* Navigation Sidebar - Hidden on mobile */}
-        <nav className="hidden md:block w-64 bg-gradient-to-b from-indigo-500/5 to-purple-500/5 dark:from-indigo-900/10 dark:to-purple-900/10 border-r border-gray-200 dark:border-gray-700 sticky top-[64px] h-[calc(100vh-64px)] overflow-y-auto">
-          <div className="p-4">
+        <nav className="hidden md:block w-64 bg-gradient-to-b from-indigo-500/5 to-purple-500/5 dark:from-indigo-900/10 dark:to-purple-900/10 border-r border-gray-200 dark:border-gray-700 sticky sm:top-[110px] h-[calc(100vh-64px)] overflow-y-auto">
+          <div className="flex flex-col h-full p-4">
             <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
               Navigation
             </h2>
@@ -492,7 +550,7 @@ export default function App() {
                   onClick={() => scrollToSection("towers-section")}
                   className="w-full text-left px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 dark:from-purple-900/20 dark:to-pink-900/20 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 text-gray-700 dark:text-gray-300 transition-all duration-300 flex items-center gap-2 text-base md:text-lg"
                 >
-                  <FaBroadcastTower className="text-lg md:text-xl" />
+                  <FaChessRook className="text-lg md:text-xl" />
                   Towers
                 </button>
               </li>
@@ -512,7 +570,7 @@ export default function App() {
         {/* Main Content */}
         <main className="flex-1 container mx-auto p-4 flex flex-col gap-6">
           {/* Filter Section */}
-          <div className="sticky top-[120px] sm:top-[120px] z-40">
+          <div className=" z-40">
             <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-indigo-500/10 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 rounded-xl border border-gray-200 dark:border-gray-700">
               <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -545,10 +603,10 @@ export default function App() {
 
           {/* Dungeons Section */}
           <div id="dungeons-section">
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[270px] sm:top-[218px] z-30">
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
               <div className="p-4 border-b border-blue-500/20 dark:border-blue-400/20">
-                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
-                  <FaDungeon className="text-xl md:text-2xl" />
+                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                  <FaDungeon className="text-xl md:text-2xl text-blue-100 dark:text-blue-200" />
                   Dungeons
                 </h2>
               </div>
@@ -700,10 +758,10 @@ export default function App() {
 
           {/* Towers Section */}
           <div id="towers-section" className="scroll-mt-[180px]">
-            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[222px] sm:top-[218px] z-30">
+            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
               <div className="p-4 border-b border-purple-500/20 dark:border-purple-400/20">
-                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
-                  <FaBroadcastTower className="text-xl md:text-2xl" />
+                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                  <FaChessRook className="text-xl md:text-2xl text-purple-100 dark:text-purple-200" />
                   Towers
                 </h2>
               </div>
@@ -747,10 +805,10 @@ export default function App() {
 
           {/* World Events Section */}
           <div id="world-events-section" className="scroll-mt-[180px]">
-            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[222px] sm:top-[218px] z-30">
+            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
               <div className="p-4 border-b border-emerald-500/20 dark:border-emerald-400/20">
-                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
-                  <FaCalendarAlt className="text-xl md:text-2xl" />
+                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                  <FaCalendarAlt className="text-xl md:text-2xl text-emerald-100 dark:text-emerald-200" />
                   World Events
                 </h2>
               </div>
@@ -842,6 +900,19 @@ export default function App() {
           </div>
         </main>
       </div>
+
+      <footer className="mt-auto mb-2 text-xs text-gray-400 dark:text-gray-500 text-center select-none fixed bottom-4 left-4 hidden sm:block">
+        Made with love{" "}
+        <span className="inline-block align-middle text-red-500">❤️</span> by
+        <a
+          href="https://www.roblox.com/users/4956994994/profile"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-1 underline hover:text-indigo-600 dark:hover:text-indigo-400"
+        >
+          squalvj
+        </a>
+      </footer>
     </div>
   );
 }
