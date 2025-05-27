@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { worlds } from "./data/worlds";
 import { towers } from "./data/towers";
 import { worldEvents } from "./data/worldEvents";
@@ -22,15 +22,15 @@ const LAST_UPDATED = "27 May 2025";
 const ENGAGING_MESSAGES = [
   "Hey there! Ready to conquer some dungeons? 💪",
   "These bosses? Cooked. 🍳",
-  "You’re eatin’ these dungeons for breakfast! 🥞",
-  "Yo, the bosses don’t even know what hit ‘em! 💥",
-  "Another one? Already? Bro, you’re wild. 🔥",
-  "They thought they had a chance—nah, they’re toast! 🍞",
-  "You’re rollin’ through like a wrecking ball! 🏗️",
-  "Bosses lookin’ like they need a break. 💀",
-  "You’re snackin’ on these dungeons like chips! 🥔",
-  "They shoulda stayed home, you’re too cold! 🥶",
-  "Man, you’re turning these dungeons into a highlight reel! 🎥",
+  "You're eatin' these dungeons for breakfast! 🥞",
+  "Yo, the bosses don't even know what hit 'em! 💥",
+  "Another one? Already? Bro, you're wild. 🔥",
+  "They thought they had a chance—nah, they're toast! 🍞",
+  "You're rollin' through like a wrecking ball! 🏗️",
+  "Bosses lookin' like they need a break. 💀",
+  "You're snackin' on these dungeons like chips! 🥔",
+  "They shoulda stayed home, you're too cold! 🥶",
+  "Man, you're turning these dungeons into a highlight reel! 🎥",
   "You're crushing it! More dungeons await! ⚔️",
   "Dungeons don't stand a chance against you! 🛡️",
   "You're on fire! Nothing can stop you now! 🔥",
@@ -120,14 +120,33 @@ export default function App() {
   const [currentMessage, setCurrentMessage] = useState(ENGAGING_MESSAGES[0]);
   const [showChad, setShowChad] = useState(true);
   const [currentChadImage, setCurrentChadImage] = useState(1);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  ); // Fix type and provide initial value
+
+  // Function to handle showing chad
+  const showChadWithTimer = () => {
+    // Clear any existing timer
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+    }
+    // Show chad
+    setShowChad(true);
+    // Set new timer
+    hideTimerRef.current = setTimeout(() => {
+      setShowChad(false);
+    }, 5000);
+  };
 
   // Add effect for initial show/hide
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowChad(false);
-    }, 5000);
-
-    return () => clearTimeout(timer);
+    showChadWithTimer();
+    // Cleanup on unmount
+    return () => {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+      }
+    };
   }, []); // Run only once on mount
 
   // Save checklist changes
@@ -163,7 +182,7 @@ export default function App() {
     localStorage.setItem("confettiEnabled", confettiEnabled.toString());
   }, [confettiEnabled]);
 
-  // Modify triggerCelebration to include showing chad and random image
+  // Modify triggerCelebration to use the new show function
   const triggerCelebration = () => {
     if (confettiEnabled) {
       setShowConfetti(true);
@@ -172,10 +191,8 @@ export default function App() {
       setCurrentMessage(ENGAGING_MESSAGES[randomIndex]);
       // Randomly select chad image (1 or 2)
       setCurrentChadImage(Math.random() < 0.5 ? 1 : 2);
-      // Show chad with new message
-      setShowChad(true);
-      // Hide after 7 seconds
-      setTimeout(() => setShowChad(false), 7000);
+      // Show chad with new message and start timer
+      showChadWithTimer();
       setTimeout(() => setShowConfetti(false), 6000);
     }
   };
