@@ -713,7 +713,7 @@ export default function App() {
 
           {/* Dungeons Section */}
           <div id="dungeons-section">
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[131px] z-30">
               <div className="p-4 border-b border-blue-500/20 dark:border-blue-400/20">
                 <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                   <FaDungeon className="text-xl md:text-2xl text-blue-100 dark:text-blue-200" />
@@ -913,7 +913,7 @@ export default function App() {
 
           {/* Towers Section */}
           <div id="towers-section" className="scroll-mt-[180px]">
-            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
+            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[131px] z-30">
               <div className="p-4 border-b border-purple-500/20 dark:border-purple-400/20">
                 <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                   <FaChessRook className="text-xl md:text-2xl text-purple-100 dark:text-purple-200" />
@@ -960,7 +960,7 @@ export default function App() {
 
           {/* World Events Section */}
           <div id="world-events-section" className="scroll-mt-[180px]">
-            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
+            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[131px] z-30">
               <div className="p-4 border-b border-emerald-500/20 dark:border-emerald-400/20">
                 <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                   <FaCalendarAlt className="text-xl md:text-2xl text-emerald-100 dark:text-emerald-200" />
