@@ -839,7 +839,7 @@ export default function App() {
                                   className="h-4 w-4 md:h-5 md:w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                                 />
                                 <span className="text-sm md:text-base text-gray-600 dark:text-gray-300">
-                                  Challenged
+                                  Challenge
                                 </span>
                               </label>
                             </div>
