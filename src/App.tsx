@@ -577,7 +577,7 @@ export default function App() {
       {/* Main Content with Sidebar */}
       <div className="flex flex-1">
         {/* Navigation Sidebar - Hidden on mobile */}
-        <nav className="hidden md:block w-64 bg-gradient-to-b from-indigo-500/5 to-purple-500/5 dark:from-indigo-900/10 dark:to-purple-900/10 border-r border-gray-200 dark:border-gray-700 sticky sm:top-[110px] h-[calc(100vh-64px)] overflow-y-auto">
+        <nav className="hidden md:block w-64 bg-gradient-to-b from-indigo-500/5 to-purple-500/5 dark:from-indigo-900/10 dark:to-purple-900/10 border-r border-gray-200 dark:border-gray-700 sticky sm:top-[132px] h-[calc(100vh-64px)] overflow-y-auto">
           <div className="flex flex-col h-full p-4">
             <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
               Navigation
