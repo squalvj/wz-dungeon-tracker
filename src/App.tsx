@@ -713,12 +713,47 @@ export default function App() {
 
           {/* Dungeons Section */}
           <div id="dungeons-section">
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[131px] z-30">
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[111px] sm:top-[131px] z-30">
               <div className="p-4 border-b border-blue-500/20 dark:border-blue-400/20">
-                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
-                  <FaDungeon className="text-xl md:text-2xl text-blue-100 dark:text-blue-200" />
-                  Dungeons
-                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                    <FaDungeon className="text-xl md:text-2xl text-blue-100 dark:text-blue-200" />
+                    Dungeons
+                  </h2>
+                  <div className="text-sm md:text-base bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                    {(() => {
+                      let total = 0;
+                      let completed = 0;
+                      worlds.forEach((world) => {
+                        world.dungeons.forEach((dungeon) => {
+                          total += 2; // normal and challenged
+                          if (checklist[dungeon.id]?.normal) completed++;
+                          if (checklist[dungeon.id]?.challenged) completed++;
+                        });
+                      });
+                      return `${completed}/${total} Completed`;
+                    })()}
+                  </div>
+                </div>
+                <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300 shadow-sm"
+                    style={{
+                      width: `${(() => {
+                        let total = 0;
+                        let completed = 0;
+                        worlds.forEach((world) => {
+                          world.dungeons.forEach((dungeon) => {
+                            total += 2; // normal and challenged
+                            if (checklist[dungeon.id]?.normal) completed++;
+                            if (checklist[dungeon.id]?.challenged) completed++;
+                          });
+                        });
+                        return (completed / total) * 100;
+                      })()}%`,
+                    }}
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -756,7 +791,7 @@ export default function App() {
                   >
                     {/* World Header */}
                     <div className="p-4 border-b border-gray-400 dark:border-gray-500">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                         <h3
                           className={`text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 ${
                             progress.completed === progress.total
@@ -766,13 +801,19 @@ export default function App() {
                         >
                           {world.name}
                         </h3>
-                        <div className="flex items-center gap-2">
-                          <div className="text-sm md:text-base text-gray-600 dark:text-gray-300">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                          <div
+                            className={`text-sm md:text-base text-gray-600 dark:text-gray-300 ${
+                              progress.completed === progress.total
+                                ? "opacity-50"
+                                : ""
+                            }`}
+                          >
                             {progress.completed}/{progress.total} Completed
                           </div>
                           <button
                             type="button"
-                            className={`ml-2 px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
+                            className={`px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
                               progress.completed === progress.total
                                 ? "opacity-70"
                                 : ""
@@ -913,12 +954,37 @@ export default function App() {
 
           {/* Towers Section */}
           <div id="towers-section" className="scroll-mt-[180px]">
-            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[131px] z-30">
+            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[111px] sm:top-[131px] z-30">
               <div className="p-4 border-b border-purple-500/20 dark:border-purple-400/20">
-                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
-                  <FaChessRook className="text-xl md:text-2xl text-purple-100 dark:text-purple-200" />
-                  Towers
-                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                    <FaChessRook className="text-xl md:text-2xl text-purple-100 dark:text-purple-200" />
+                    Towers
+                  </h2>
+                  <div className="text-sm md:text-base bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                    {(() => {
+                      const total = towers.length;
+                      const completed = towers.filter(
+                        (tower) => towerChecklist[tower.id]
+                      ).length;
+                      return `${completed}/${total} Completed`;
+                    })()}
+                  </div>
+                </div>
+                <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-600 rounded-full transition-all duration-300 shadow-sm"
+                    style={{
+                      width: `${(() => {
+                        const total = towers.length;
+                        const completed = towers.filter(
+                          (tower) => towerChecklist[tower.id]
+                        ).length;
+                        return (completed / total) * 100;
+                      })()}%`,
+                    }}
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -960,12 +1026,51 @@ export default function App() {
 
           {/* World Events Section */}
           <div id="world-events-section" className="scroll-mt-[180px]">
-            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[131px] z-30">
+            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[111px] sm:top-[131px] z-30">
               <div className="p-4 border-b border-emerald-500/20 dark:border-emerald-400/20">
-                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
-                  <FaCalendarAlt className="text-xl md:text-2xl text-emerald-100 dark:text-emerald-200" />
-                  World Events
-                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                    <FaCalendarAlt className="text-xl md:text-2xl text-emerald-100 dark:text-emerald-200" />
+                    World Events
+                  </h2>
+                  <div className="text-sm md:text-base bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                    {(() => {
+                      let total = 0;
+                      let completed = 0;
+                      worldEvents.forEach((world) => {
+                        for (let i = 0; i < world.count; i++) {
+                          total++;
+                          if (
+                            worldEventChecklist[`${world.worldId}-event-${i}`]
+                          )
+                            completed++;
+                        }
+                      });
+                      return `${completed}/${total} Completed`;
+                    })()}
+                  </div>
+                </div>
+                <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full transition-all duration-300 shadow-sm"
+                    style={{
+                      width: `${(() => {
+                        let total = 0;
+                        let completed = 0;
+                        worldEvents.forEach((world) => {
+                          for (let i = 0; i < world.count; i++) {
+                            total++;
+                            if (
+                              worldEventChecklist[`${world.worldId}-event-${i}`]
+                            )
+                              completed++;
+                          }
+                        });
+                        return (completed / total) * 100;
+                      })()}%`,
+                    }}
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -1018,11 +1123,11 @@ export default function App() {
                         isWorldEventsCompleted ? "opacity-50" : ""
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <span>{worldData?.name} Events</span>
                         <button
                           type="button"
-                          className={`ml-2 px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
+                          className={`px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
                             isWorldEventsCompleted ? "opacity-70" : ""
                           }`}
                           onClick={() => {

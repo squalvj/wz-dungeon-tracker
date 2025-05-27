@@ -16,7 +16,8 @@ export const worlds: World[] = [
   {
     id: "1",
     name: "World 1",
-    color: "bg-blue-100 border-blue-300",
+    color:
+      "bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-50 border-blue-200",
     dungeons: [
       {
         id: "1-1",
@@ -53,7 +54,8 @@ export const worlds: World[] = [
   {
     id: "2",
     name: "World 2",
-    color: "bg-green-100 border-green-300",
+    color:
+      "bg-gradient-to-br from-emerald-50 via-green-100 to-teal-50 border-green-200",
     dungeons: [
       {
         id: "2-1",
@@ -84,7 +86,8 @@ export const worlds: World[] = [
   {
     id: "3",
     name: "World 3",
-    color: "bg-sky-100 border-sky-300",
+    color:
+      "bg-gradient-to-br from-sky-50 via-cyan-100 to-blue-50 border-sky-200",
     dungeons: [
       {
         id: "3-1",
@@ -109,7 +112,8 @@ export const worlds: World[] = [
   {
     id: "4",
     name: "World 4",
-    color: "bg-yellow-100 border-yellow-300",
+    color:
+      "bg-gradient-to-br from-amber-50 via-yellow-100 to-orange-50 border-yellow-200",
     dungeons: [
       {
         id: "4-1",
@@ -134,7 +138,8 @@ export const worlds: World[] = [
   {
     id: "5",
     name: "World 5",
-    color: "bg-red-100 border-red-300",
+    color:
+      "bg-gradient-to-br from-red-50 via-rose-100 to-pink-50 border-red-200",
     dungeons: [
       {
         id: "5-1",
@@ -153,7 +158,8 @@ export const worlds: World[] = [
   {
     id: "6",
     name: "World 6",
-    color: "bg-teal-100 border-teal-300",
+    color:
+      "bg-gradient-to-br from-teal-50 via-emerald-100 to-green-50 border-teal-200",
     dungeons: [
       {
         id: "6-1",
@@ -172,7 +178,8 @@ export const worlds: World[] = [
   {
     id: "7",
     name: "World 7",
-    color: "bg-pink-100 border-pink-300",
+    color:
+      "bg-gradient-to-br from-pink-50 via-fuchsia-100 to-purple-50 border-pink-200",
     dungeons: [
       {
         id: "7-1",
@@ -191,7 +198,8 @@ export const worlds: World[] = [
   {
     id: "8",
     name: "World 8",
-    color: "bg-orange-100 border-orange-300",
+    color:
+      "bg-gradient-to-br from-orange-50 via-amber-100 to-yellow-50 border-orange-200",
     dungeons: [
       {
         id: "8-1",
@@ -210,7 +218,8 @@ export const worlds: World[] = [
   {
     id: "9",
     name: "World 9",
-    color: "bg-purple-100 border-purple-300",
+    color:
+      "bg-gradient-to-br from-purple-50 via-violet-100 to-indigo-50 border-purple-200",
     dungeons: [
       {
         id: "9-1",
@@ -229,7 +238,8 @@ export const worlds: World[] = [
   {
     id: "10",
     name: "World 10",
-    color: "bg-indigo-100 border-indigo-300",
+    color:
+      "bg-gradient-to-br from-indigo-50 via-blue-100 to-violet-50 border-indigo-200",
     dungeons: [
       {
         id: "10-1",
