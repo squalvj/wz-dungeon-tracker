@@ -666,17 +666,10 @@ export default function App() {
           </div>
 
           {/* Points Display */}
-          <div className="w-full flex justify-start">
-            <div className="rounded-xl bg-gradient-to-r from-yellow-200 via-pink-200 to-indigo-200 dark:from-yellow-900 dark:via-pink-900 dark:to-indigo-900 shadow-lg px-6 py-3 flex items-center gap-3 text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
-              <span className="drop-shadow text-yellow-700 dark:text-yellow-300">
-                Points:
-              </span>
-              <span
-                data-testid="points-value"
-                className="drop-shadow text-pink-700 dark:text-pink-200"
-              >
-                {(() => {
-                  // Dungeons
+          <div className="w-full flex justify-start items-center gap-4">
+            <div
+              className={`relative rounded-xl shadow-lg px-6 py-3 flex items-center gap-3 text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 border-2 border-transparent overflow-hidden group ${(() => {
+                const points = (() => {
                   let dungeonPoints = 0;
                   worlds.forEach((world) => {
                     world.dungeons.forEach((dungeon) => {
@@ -686,7 +679,6 @@ export default function App() {
                         dungeonPoints += dungeon.pointsChallenged;
                     });
                   });
-                  // Towers (exclude infinite tower)
                   let towerPoints = 0;
                   towers.forEach((tower) => {
                     if (
@@ -696,7 +688,400 @@ export default function App() {
                       towerPoints += tower.points;
                     }
                   });
-                  // World Events
+                  let eventPoints = 0;
+                  worldEvents.forEach((world) => {
+                    for (let i = 0; i < world.count; i++) {
+                      if (worldEventChecklist[`${world.worldId}-event-${i}`]) {
+                        eventPoints += world.points;
+                      }
+                    }
+                  });
+                  return dungeonPoints + towerPoints + eventPoints;
+                })();
+
+                if (points >= 300) {
+                  return "bg-gradient-to-r from-yellow-200 via-amber-200 to-yellow-200 dark:from-yellow-900 dark:via-amber-900 dark:to-yellow-900 animate-float";
+                }
+                if (points >= 150) {
+                  return "bg-gradient-to-r from-blue-200 via-indigo-200 to-blue-200 dark:from-blue-900 dark:via-indigo-900 dark:to-blue-900 animate-float";
+                }
+                if (points >= 85) {
+                  return "bg-gradient-to-r from-emerald-200 via-teal-200 to-emerald-200 dark:from-emerald-900 dark:via-teal-900 dark:to-emerald-900 animate-float";
+                }
+                if (points >= 50) {
+                  return "bg-gradient-to-r from-pink-200 via-rose-200 to-pink-200 dark:from-pink-900 dark:via-rose-900 dark:to-pink-900 animate-float";
+                }
+                return "bg-gradient-to-r from-gray-200 via-slate-200 to-gray-200 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900";
+              })()}`}
+            >
+              {/* Intense fire background */}
+              <div
+                className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+                  return points >= 50 ? "" : "hidden";
+                })()}`}
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,100,0,0.4),transparent_70%)] animate-fire"></div>
+                <div
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_30%_120%,rgba(255,200,0,0.4),transparent_70%)] animate-fire"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
+                <div
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_70%_120%,rgba(255,150,0,0.4),transparent_70%)] animate-fire"
+                  style={{ animationDelay: "0.4s" }}
+                ></div>
+                <div
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_20%_120%,rgba(255,50,0,0.4),transparent_70%)] animate-fire"
+                  style={{ animationDelay: "0.6s" }}
+                ></div>
+                <div
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_80%_120%,rgba(255,100,0,0.4),transparent_70%)] animate-fire"
+                  style={{ animationDelay: "0.8s" }}
+                ></div>
+              </div>
+
+              {/* Pulsing border effect */}
+              <div
+                className={`absolute inset-0 rounded-xl animate-pulse-border ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+                  return points >= 50 ? "" : "hidden";
+                })()}`}
+              ></div>
+
+              {/* Bright glow effect */}
+              <div
+                className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+                  return points >= 50 ? "" : "hidden";
+                })()}`}
+                style={{
+                  background: `radial-gradient(circle at center, ${(() => {
+                    const points = (() => {
+                      let dungeonPoints = 0;
+                      worlds.forEach((world) => {
+                        world.dungeons.forEach((dungeon) => {
+                          if (checklist[dungeon.id]?.normal)
+                            dungeonPoints += dungeon.pointsNormal;
+                          if (checklist[dungeon.id]?.challenged)
+                            dungeonPoints += dungeon.pointsChallenged;
+                        });
+                      });
+                      let towerPoints = 0;
+                      towers.forEach((tower) => {
+                        if (
+                          towerChecklist[tower.id] &&
+                          !/infinite/i.test(tower.name)
+                        ) {
+                          towerPoints += tower.points;
+                        }
+                      });
+                      let eventPoints = 0;
+                      worldEvents.forEach((world) => {
+                        for (let i = 0; i < world.count; i++) {
+                          if (
+                            worldEventChecklist[`${world.worldId}-event-${i}`]
+                          ) {
+                            eventPoints += world.points;
+                          }
+                        }
+                      });
+                      return dungeonPoints + towerPoints + eventPoints;
+                    })();
+
+                    if (points >= 500) return "rgba(255,215,0,0.5)"; // Gold
+                    if (points >= 300) return "rgba(192,192,192,0.5)"; // Silver
+                    if (points >= 100) return "rgba(205,127,50,0.5)"; // Bronze
+                    if (points >= 50) return "rgba(255,255,255,0.4)"; // White
+                    return "transparent";
+                  })()} 0%, transparent 70%)`,
+                }}
+              ></div>
+
+              {/* Floating particles */}
+              <div
+                className={`absolute inset-0 overflow-hidden ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+                  return points >= 50 ? "" : "hidden";
+                })()}`}
+              >
+                {Array.from({ length: 20 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`absolute w-1.5 h-1.5 rounded-full animate-float-particle ${(() => {
+                      const points = (() => {
+                        let dungeonPoints = 0;
+                        worlds.forEach((world) => {
+                          world.dungeons.forEach((dungeon) => {
+                            if (checklist[dungeon.id]?.normal)
+                              dungeonPoints += dungeon.pointsNormal;
+                            if (checklist[dungeon.id]?.challenged)
+                              dungeonPoints += dungeon.pointsChallenged;
+                          });
+                        });
+                        let towerPoints = 0;
+                        towers.forEach((tower) => {
+                          if (
+                            towerChecklist[tower.id] &&
+                            !/infinite/i.test(tower.name)
+                          ) {
+                            towerPoints += tower.points;
+                          }
+                        });
+                        let eventPoints = 0;
+                        worldEvents.forEach((world) => {
+                          for (let i = 0; i < world.count; i++) {
+                            if (
+                              worldEventChecklist[`${world.worldId}-event-${i}`]
+                            ) {
+                              eventPoints += world.points;
+                            }
+                          }
+                        });
+                        return dungeonPoints + towerPoints + eventPoints;
+                      })();
+
+                      if (points >= 300)
+                        return "bg-yellow-400/80 dark:bg-yellow-300/80";
+                      if (points >= 150)
+                        return "bg-blue-400/80 dark:bg-blue-300/80";
+                      if (points >= 85)
+                        return "bg-emerald-400/80 dark:bg-emerald-300/80";
+                      if (points >= 50)
+                        return "bg-pink-400/80 dark:bg-pink-300/80";
+                      return "bg-gray-400/80 dark:bg-gray-300/80";
+                    })()}`}
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      animationDelay: `${Math.random() * 2}s`,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <span
+                className={`drop-shadow text-yellow-800 dark:text-yellow-300 relative z-10 ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+                  return points >= 50 ? "animate-shake" : "";
+                })()}`}
+              >
+                Points:
+              </span>
+              <span
+                data-testid="points-value"
+                className={`drop-shadow relative z-10 transition-all duration-300 ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+
+                  if (points >= 300)
+                    return "text-yellow-700 dark:text-yellow-300 animate-shake animate-glow";
+                  if (points >= 150)
+                    return "text-gray-700 dark:text-gray-300 animate-shake animate-glow";
+                  if (points >= 85)
+                    return "text-amber-800 dark:text-amber-400 animate-shake";
+                  if (points >= 50)
+                    return "text-pink-800 dark:text-pink-400 animate-shake";
+                  return "text-pink-900 dark:text-pink-200";
+                })()}`}
+              >
+                {(() => {
+                  let dungeonPoints = 0;
+                  worlds.forEach((world) => {
+                    world.dungeons.forEach((dungeon) => {
+                      if (checklist[dungeon.id]?.normal)
+                        dungeonPoints += dungeon.pointsNormal;
+                      if (checklist[dungeon.id]?.challenged)
+                        dungeonPoints += dungeon.pointsChallenged;
+                    });
+                  });
+                  let towerPoints = 0;
+                  towers.forEach((tower) => {
+                    if (
+                      towerChecklist[tower.id] &&
+                      !/infinite/i.test(tower.name)
+                    ) {
+                      towerPoints += tower.points;
+                    }
+                  });
                   let eventPoints = 0;
                   worldEvents.forEach((world) => {
                     for (let i = 0; i < world.count; i++) {
@@ -708,7 +1093,195 @@ export default function App() {
                   return dungeonPoints + towerPoints + eventPoints;
                 })()}
               </span>
+
+              {/* Fire particles */}
+              <div
+                className={`absolute -right-2 -top-2 flex gap-1 ${(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+                  return points >= 50 ? "" : "hidden";
+                })()}`}
+              >
+                {(() => {
+                  const points = (() => {
+                    let dungeonPoints = 0;
+                    worlds.forEach((world) => {
+                      world.dungeons.forEach((dungeon) => {
+                        if (checklist[dungeon.id]?.normal)
+                          dungeonPoints += dungeon.pointsNormal;
+                        if (checklist[dungeon.id]?.challenged)
+                          dungeonPoints += dungeon.pointsChallenged;
+                      });
+                    });
+                    let towerPoints = 0;
+                    towers.forEach((tower) => {
+                      if (
+                        towerChecklist[tower.id] &&
+                        !/infinite/i.test(tower.name)
+                      ) {
+                        towerPoints += tower.points;
+                      }
+                    });
+                    let eventPoints = 0;
+                    worldEvents.forEach((world) => {
+                      for (let i = 0; i < world.count; i++) {
+                        if (
+                          worldEventChecklist[`${world.worldId}-event-${i}`]
+                        ) {
+                          eventPoints += world.points;
+                        }
+                      }
+                    });
+                    return dungeonPoints + towerPoints + eventPoints;
+                  })();
+
+                  return (
+                    <>
+                      {points >= 50 && (
+                        <div
+                          className="w-4 h-4 rounded-full bg-gradient-to-b from-pink-400 to-rose-500 animate-fire-particle"
+                          style={{ animationDelay: "0s" }}
+                        ></div>
+                      )}
+                      {points >= 85 && (
+                        <div
+                          className="w-4 h-4 rounded-full bg-gradient-to-b from-emerald-400 to-teal-500 animate-fire-particle"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
+                      )}
+                      {points >= 150 && (
+                        <div
+                          className="w-4 h-4 rounded-full bg-gradient-to-b from-blue-400 to-indigo-500 animate-fire-particle"
+                          style={{ animationDelay: "0.4s" }}
+                        ></div>
+                      )}
+                      {points >= 300 && (
+                        <div
+                          className="w-4 h-4 rounded-full bg-gradient-to-b from-yellow-400 to-amber-500 animate-fire-particle"
+                          style={{ animationDelay: "0.6s" }}
+                        ></div>
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
             </div>
+
+            {/* Tier Title */}
+            {(() => {
+              const points = (() => {
+                let dungeonPoints = 0;
+                worlds.forEach((world) => {
+                  world.dungeons.forEach((dungeon) => {
+                    if (checklist[dungeon.id]?.normal)
+                      dungeonPoints += dungeon.pointsNormal;
+                    if (checklist[dungeon.id]?.challenged)
+                      dungeonPoints += dungeon.pointsChallenged;
+                  });
+                });
+                let towerPoints = 0;
+                towers.forEach((tower) => {
+                  if (
+                    towerChecklist[tower.id] &&
+                    !/infinite/i.test(tower.name)
+                  ) {
+                    towerPoints += tower.points;
+                  }
+                });
+                let eventPoints = 0;
+                worldEvents.forEach((world) => {
+                  for (let i = 0; i < world.count; i++) {
+                    if (worldEventChecklist[`${world.worldId}-event-${i}`]) {
+                      eventPoints += world.points;
+                    }
+                  }
+                });
+                return dungeonPoints + towerPoints + eventPoints;
+              })();
+
+              if (points >= 300) {
+                return (
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-500 to-red-500 text-white font-bold text-lg md:text-xl animate-pulse">
+                      <span className="drop-shadow-lg">Top Grinder</span>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2),transparent_70%)] animate-pulse"></div>
+                    </div>
+                  </div>
+                );
+              }
+              if (points >= 150) {
+                return (
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-lg md:text-xl animate-bounce">
+                      <span className="drop-shadow-lg">Reliable</span>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2),transparent_70%)] animate-pulse"></div>
+                    </div>
+                  </div>
+                );
+              }
+              if (points >= 85) {
+                return (
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-lg md:text-xl animate-pulse">
+                      <span className="drop-shadow-lg">Decent</span>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2),transparent_70%)] animate-pulse"></div>
+                    </div>
+                  </div>
+                );
+              }
+              if (points >= 50) {
+                return (
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-pink-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative px-4 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold text-lg md:text-xl animate-bounce">
+                      <span className="drop-shadow-lg">Sidekick</span>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2),transparent_70%)] animate-pulse"></div>
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                  <div className="relative px-4 py-2 rounded-lg bg-gradient-to-r from-gray-500 to-gray-700 text-white font-bold text-lg md:text-xl">
+                    <span className="drop-shadow-lg">Normies</span>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2),transparent_70%)]"></div>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Dungeons Section */}
@@ -1265,12 +1838,74 @@ export default function App() {
               transform: translateY(0);
             }
           }
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+          }
+          @keyframes glow {
+            0% { filter: brightness(1) drop-shadow(0 0 2px rgba(255,255,255,0.7)); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+            100% { filter: brightness(1) drop-shadow(0 0 2px rgba(255,255,255,0.7)); }
+          }
+          @keyframes fire {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-5px) scale(1.1); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.8; }
+          }
+          @keyframes fire-particle {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-8px) scale(1.2); opacity: 0.8; }
+            100% { transform: translateY(-16px) scale(0.8); opacity: 0; }
+          }
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+          }
+          @keyframes float-particle {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+            100% { transform: translateY(-40px) translateX(-10px); opacity: 0; }
+          }
+          @keyframes pulse-border {
+            0% { border-color: rgba(255,255,255,0.1); }
+            50% { border-color: rgba(255,255,255,0.5); }
+            100% { border-color: rgba(255,255,255,0.1); }
+          }
+          @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+          }
           .animate-slide-up {
             animation: slide-up 0.8s ease-out forwards;
           }
           .animate-fade-in-up {
             animation: fade-in-up 0.5s ease-out 0.3s forwards;
             opacity: 0;
+          }
+          .animate-shake {
+            animation: shake 0.5s ease-in-out infinite;
+          }
+          .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+          }
+          .animate-fire {
+            animation: fire 2s ease-in-out infinite;
+          }
+          .animate-fire-particle {
+            animation: fire-particle 1.5s ease-out infinite;
+          }
+          .animate-float {
+            animation: float 3s ease-in-out infinite;
+          }
+          .animate-float-particle {
+            animation: float-particle 3s ease-out infinite;
+          }
+          .animate-pulse-border {
+            animation: pulse-border 2s ease-in-out infinite;
+          }
+          .animate-bounce {
+            animation: bounce 1s ease-in-out infinite;
           }
         `}
       </style>
