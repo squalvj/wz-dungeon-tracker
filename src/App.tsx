@@ -601,6 +601,52 @@ export default function App() {
             </div>
           </div>
 
+          {/* Points Display */}
+          <div className="w-full flex justify-start">
+            <div className="rounded-xl bg-gradient-to-r from-yellow-200 via-pink-200 to-indigo-200 dark:from-yellow-900 dark:via-pink-900 dark:to-indigo-900 shadow-lg px-6 py-3 flex items-center gap-3 text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+              <span className="drop-shadow text-yellow-700 dark:text-yellow-300">
+                Points:
+              </span>
+              <span
+                data-testid="points-value"
+                className="drop-shadow text-pink-700 dark:text-pink-200"
+              >
+                {(() => {
+                  // Dungeons
+                  let dungeonPoints = 0;
+                  worlds.forEach((world) => {
+                    world.dungeons.forEach((dungeon) => {
+                      if (checklist[dungeon.id]?.normal)
+                        dungeonPoints += dungeon.pointsNormal;
+                      if (checklist[dungeon.id]?.challenged)
+                        dungeonPoints += dungeon.pointsChallenged;
+                    });
+                  });
+                  // Towers (exclude infinite tower)
+                  let towerPoints = 0;
+                  towers.forEach((tower) => {
+                    if (
+                      towerChecklist[tower.id] &&
+                      !/infinite/i.test(tower.name)
+                    ) {
+                      towerPoints += tower.points;
+                    }
+                  });
+                  // World Events
+                  let eventPoints = 0;
+                  worldEvents.forEach((world) => {
+                    for (let i = 0; i < world.count; i++) {
+                      if (worldEventChecklist[`${world.worldId}-event-${i}`]) {
+                        eventPoints += world.points;
+                      }
+                    }
+                  });
+                  return dungeonPoints + towerPoints + eventPoints;
+                })()}
+              </span>
+            </div>
+          </div>
+
           {/* Dungeons Section */}
           <div id="dungeons-section">
             <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[94px] sm:top-[106px] z-30">
