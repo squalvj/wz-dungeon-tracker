@@ -13,6 +13,7 @@ import {
   FaFire,
   FaBars,
   FaTimes,
+  FaCheckSquare,
 } from "react-icons/fa";
 import wzLogo from "/wz_logo.png";
 
@@ -707,8 +708,53 @@ export default function App() {
                         >
                           {world.name}
                         </h3>
-                        <div className="text-sm md:text-base text-gray-600 dark:text-gray-300">
-                          {progress.completed}/{progress.total} Completed
+                        <div className="flex items-center gap-2">
+                          <div className="text-sm md:text-base text-gray-600 dark:text-gray-300">
+                            {progress.completed}/{progress.total} Completed
+                          </div>
+                          <button
+                            type="button"
+                            className={`ml-2 px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
+                              progress.completed === progress.total
+                                ? "opacity-70"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              const allChecked = world.dungeons.every(
+                                (dungeon) =>
+                                  checklist[dungeon.id]?.normal &&
+                                  checklist[dungeon.id]?.challenged
+                              );
+                              setChecklist((prev) => {
+                                const newState = { ...prev };
+                                world.dungeons.forEach((dungeon) => {
+                                  newState[dungeon.id] = allChecked
+                                    ? { normal: false, challenged: false }
+                                    : { normal: true, challenged: true };
+                                });
+                                return newState;
+                              });
+                              if (!allChecked) triggerCelebration();
+                            }}
+                            aria-label={
+                              world.dungeons.every(
+                                (dungeon) =>
+                                  checklist[dungeon.id]?.normal &&
+                                  checklist[dungeon.id]?.challenged
+                              )
+                                ? "Uncheck all dungeons"
+                                : "Check all dungeons"
+                            }
+                          >
+                            <FaCheckSquare />
+                            {world.dungeons.every(
+                              (dungeon) =>
+                                checklist[dungeon.id]?.normal &&
+                                checklist[dungeon.id]?.challenged
+                            )
+                              ? "Uncheck All"
+                              : "Check All"}
+                          </button>
                         </div>
                       </div>
                       {/* Progress Bar */}
@@ -914,7 +960,54 @@ export default function App() {
                         isWorldEventsCompleted ? "opacity-50" : ""
                       }`}
                     >
-                      {worldData?.name} Events
+                      <div className="flex items-center justify-between">
+                        <span>{worldData?.name} Events</span>
+                        <button
+                          type="button"
+                          className={`ml-2 px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
+                            isWorldEventsCompleted ? "opacity-70" : ""
+                          }`}
+                          onClick={() => {
+                            const allChecked = Array.from({
+                              length: world.count,
+                            }).every(
+                              (_, index) =>
+                                worldEventChecklist[
+                                  `${world.worldId}-event-${index}`
+                                ]
+                            );
+                            setWorldEventChecklist((prev) => {
+                              const newState = { ...prev };
+                              for (let i = 0; i < world.count; i++) {
+                                newState[`${world.worldId}-event-${i}`] =
+                                  !allChecked;
+                              }
+                              return newState;
+                            });
+                            if (!allChecked) triggerCelebration();
+                          }}
+                          aria-label={
+                            Array.from({ length: world.count }).every(
+                              (_, index) =>
+                                worldEventChecklist[
+                                  `${world.worldId}-event-${index}`
+                                ]
+                            )
+                              ? "Uncheck all events"
+                              : "Check all events"
+                          }
+                        >
+                          <FaCheckSquare />
+                          {Array.from({ length: world.count }).every(
+                            (_, index) =>
+                              worldEventChecklist[
+                                `${world.worldId}-event-${index}`
+                              ]
+                          )
+                            ? "Uncheck All"
+                            : "Check All"}
+                        </button>
+                      </div>
                     </h3>
                     <div className="flex flex-col gap-2">
                       {visibleEvents.map(({ index }) => {
