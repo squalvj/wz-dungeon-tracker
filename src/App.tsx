@@ -3,6 +3,15 @@ import { worlds } from "./data/worlds";
 import { towers } from "./data/towers";
 import { worldEvents } from "./data/worldEvents";
 import Confetti from "react-confetti";
+import {
+  FaDungeon,
+  FaBroadcastTower,
+  FaCalendarAlt,
+  FaMoon,
+  FaSun,
+  FaTrash,
+  FaFire,
+} from "react-icons/fa";
 
 type DungeonState = {
   normal: boolean;
@@ -344,30 +353,40 @@ export default function App() {
       </style>
 
       {/* Header */}
-      <header className="bg-indigo-600 text-white py-4 shadow-lg sticky top-0 z-50">
+      <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white py-4 shadow-lg sticky top-0 z-50">
         <div className="container mx-auto flex justify-between items-center px-4">
-          <h1 className="text-2xl font-bold tracking-tight">Dungeon Tracker</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-2">
+            <FaDungeon className="text-2xl md:text-3xl" />
+            Dungeon Tracker
+          </h1>
           <div className="flex gap-2">
             <button
               onClick={resetAll}
-              className="bg-red-500/30 px-3 py-1 rounded hover:bg-red-500/40 transition"
+              className="bg-gradient-to-r from-red-500/30 to-red-600/30 px-3 py-1 rounded hover:from-red-500/40 hover:to-red-600/40 transition-all duration-300 flex items-center gap-1 text-sm md:text-base"
             >
+              <FaTrash className="text-sm md:text-base" />
               Reset All
             </button>
             <button
               onClick={() => setConfettiEnabled(!confettiEnabled)}
               className={`${
                 confettiEnabled
-                  ? "bg-yellow-500/30 hover:bg-yellow-500/40"
-                  : "bg-gray-500/30 hover:bg-gray-500/40"
-              } px-3 py-1 rounded transition`}
+                  ? "bg-gradient-to-r from-yellow-500/30 to-yellow-600/30 hover:from-yellow-500/40 hover:to-yellow-600/40"
+                  : "bg-gradient-to-r from-gray-500/30 to-gray-600/30 hover:from-gray-500/40 hover:to-gray-600/40"
+              } px-3 py-1 rounded transition-all duration-300 flex items-center gap-1 text-sm md:text-base`}
             >
-              {confettiEnabled ? "🎉 Confetti On" : "🎉 Confetti Off"}
+              <FaFire className="text-sm md:text-base" />
+              {confettiEnabled ? "Confetti On" : "Confetti Off"}
             </button>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="bg-white/30 px-3 py-1 rounded hover:bg-white/40 transition"
+              className="bg-gradient-to-r from-white/30 to-white/40 px-3 py-1 rounded hover:from-white/40 hover:to-white/50 transition-all duration-300 flex items-center gap-1 text-sm md:text-base"
             >
+              {isDarkMode ? (
+                <FaSun className="text-sm md:text-base" />
+              ) : (
+                <FaMoon className="text-sm md:text-base" />
+              )}
               {isDarkMode ? "Light Mode" : "Dark Mode"}
             </button>
           </div>
@@ -375,25 +394,25 @@ export default function App() {
       </header>
 
       {/* Filter Section */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-[64px] z-40">
+      <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-indigo-500/10 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 border-b border-gray-200 dark:border-gray-700 sticky top-[64px] z-40">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="text-sm md:text-base font-medium text-gray-700 dark:text-gray-300">
                 Filter:
               </span>
               <button
                 onClick={() => setShowUntickedOnly(!showUntickedOnly)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 py-1.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 ${
                   showUntickedOnly
-                    ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/20"
+                    : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 dark:from-gray-700 dark:to-gray-800 dark:text-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-700"
                 }`}
               >
                 {showUntickedOnly ? "Show All Items" : "Show Incomplete Only"}
               </button>
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm md:text-base text-gray-500 dark:text-gray-400">
               {showUntickedOnly
                 ? "Showing incomplete items"
                 : "Showing all items"}
@@ -404,25 +423,28 @@ export default function App() {
 
       {/* Main Content with Sidebar */}
       <div className="flex flex-1">
-        {/* Navigation Sidebar */}
-        <nav className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 sticky top-[129px] h-[calc(100vh-129px)] overflow-y-auto">
+        {/* Navigation Sidebar - Hidden on mobile */}
+        <nav className="hidden md:block w-64 bg-gradient-to-b from-indigo-500/5 to-purple-500/5 dark:from-indigo-900/10 dark:to-purple-900/10 border-r border-gray-200 dark:border-gray-700 sticky top-[129px] h-[calc(100vh-129px)] overflow-y-auto">
           <div className="p-4">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
               Navigation
             </h2>
             <ul className="space-y-2">
               <li>
-                <button className="w-full text-left px-4 py-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-gray-700 dark:text-gray-300 transition-colors">
+                <button className="w-full text-left px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500/10 to-indigo-500/10 hover:from-blue-500/20 hover:to-indigo-500/20 dark:from-blue-900/20 dark:to-indigo-900/20 dark:hover:from-blue-900/30 dark:hover:to-indigo-900/30 text-gray-700 dark:text-gray-300 transition-all duration-300 flex items-center gap-2 text-base md:text-lg">
+                  <FaDungeon className="text-lg md:text-xl" />
                   Dungeons
                 </button>
               </li>
               <li>
-                <button className="w-full text-left px-4 py-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-gray-700 dark:text-gray-300 transition-colors">
+                <button className="w-full text-left px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 dark:from-purple-900/20 dark:to-pink-900/20 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 text-gray-700 dark:text-gray-300 transition-all duration-300 flex items-center gap-2 text-base md:text-lg">
+                  <FaBroadcastTower className="text-lg md:text-xl" />
                   Towers
                 </button>
               </li>
               <li>
-                <button className="w-full text-left px-4 py-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-gray-700 dark:text-gray-300 transition-colors">
+                <button className="w-full text-left px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/20 hover:to-teal-500/20 dark:from-emerald-900/20 dark:to-teal-900/20 dark:hover:from-emerald-900/30 dark:hover:to-teal-900/30 text-gray-700 dark:text-gray-300 transition-all duration-300 flex items-center gap-2 text-base md:text-lg">
+                  <FaCalendarAlt className="text-lg md:text-xl" />
                   World Events
                 </button>
               </li>
@@ -434,9 +456,12 @@ export default function App() {
         <main className="flex-1 container mx-auto p-4 flex flex-col gap-6">
           {/* Dungeons Section */}
           <div className="scroll-mt-[129px]">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 rounded-xl border shadow-lg overflow-hidden sticky top-[120px] z-30">
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl border shadow-lg overflow-hidden sticky top-[120px] z-30">
               <div className="p-4 border-b border-blue-500/20 dark:border-blue-400/20">
-                <h2 className="text-xl font-bold text-white">Dungeons</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+                  <FaDungeon className="text-xl md:text-2xl" />
+                  Dungeons
+                </h2>
               </div>
             </div>
             <div className="mt-4 space-y-6">
@@ -464,17 +489,27 @@ export default function App() {
                     {/* World Header */}
                     <div className="p-4 border-b border-gray-400 dark:border-gray-500">
                       <div className="flex justify-between items-center">
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                        <h3
+                          className={`text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 ${
+                            progress.completed === progress.total
+                              ? "opacity-50"
+                              : ""
+                          }`}
+                        >
                           {world.name}
                         </h3>
-                        <div className="text-sm text-gray-600 dark:text-gray-300">
+                        <div className="text-sm md:text-base text-gray-600 dark:text-gray-300">
                           {progress.completed}/{progress.total} Completed
                         </div>
                       </div>
                       {/* Progress Bar */}
                       <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300 shadow-sm"
+                          className={`h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300 shadow-sm ${
+                            progress.completed === progress.total
+                              ? "opacity-50"
+                              : ""
+                          }`}
                           style={{
                             width: `${
                               (progress.completed / progress.total) * 100
@@ -485,46 +520,75 @@ export default function App() {
                     </div>
 
                     {/* Dungeons Grid */}
-                    <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {visibleDungeons.map((dungeon) => (
-                        <div
-                          key={dungeon.id}
-                          id={`dungeon-${dungeon.id}`}
-                          className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700`}
-                        >
-                          <h4 className="font-semibold text-gray-800 dark:text-gray-100 mb-3">
-                            {dungeon.name}
-                          </h4>
-                          <div className="flex flex-col gap-3">
-                            <label className="flex items-center gap-2">
-                              <input
-                                type="checkbox"
-                                checked={!!checklist[dungeon.id]?.normal}
-                                onChange={() =>
-                                  toggleDungeon(dungeon.id, "normal")
-                                }
-                                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                              />
-                              <span className="text-sm text-gray-600 dark:text-gray-300">
-                                Normal
-                              </span>
-                            </label>
-                            <label className="flex items-center gap-2">
-                              <input
-                                type="checkbox"
-                                checked={!!checklist[dungeon.id]?.challenged}
-                                onChange={() =>
-                                  toggleDungeon(dungeon.id, "challenged")
-                                }
-                                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                              />
-                              <span className="text-sm text-gray-600 dark:text-gray-300">
-                                Challenged
-                              </span>
-                            </label>
+                    <div
+                      className={`p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${
+                        progress.completed === progress.total
+                          ? "opacity-50"
+                          : ""
+                      }`}
+                    >
+                      {visibleDungeons.map((dungeon) => {
+                        const isDungeonCompleted =
+                          checklist[dungeon.id]?.normal &&
+                          checklist[dungeon.id]?.challenged;
+                        return (
+                          <div
+                            key={dungeon.id}
+                            id={`dungeon-${dungeon.id}`}
+                            className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${
+                              isDungeonCompleted ? "opacity-50" : ""
+                            }`}
+                          >
+                            <h4
+                              className={`font-semibold text-gray-800 dark:text-gray-100 mb-3 text-base md:text-lg ${
+                                isDungeonCompleted ? "opacity-50" : ""
+                              }`}
+                            >
+                              {dungeon.name}
+                            </h4>
+                            <div className="flex flex-col gap-3">
+                              <label
+                                className={`flex items-center gap-2 ${
+                                  checklist[dungeon.id]?.normal
+                                    ? "opacity-50"
+                                    : ""
+                                }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={!!checklist[dungeon.id]?.normal}
+                                  onChange={() =>
+                                    toggleDungeon(dungeon.id, "normal")
+                                  }
+                                  className="h-4 w-4 md:h-5 md:w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                />
+                                <span className="text-sm md:text-base text-gray-600 dark:text-gray-300">
+                                  Normal
+                                </span>
+                              </label>
+                              <label
+                                className={`flex items-center gap-2 ${
+                                  checklist[dungeon.id]?.challenged
+                                    ? "opacity-50"
+                                    : ""
+                                }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={!!checklist[dungeon.id]?.challenged}
+                                  onChange={() =>
+                                    toggleDungeon(dungeon.id, "challenged")
+                                  }
+                                  className="h-4 w-4 md:h-5 md:w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                />
+                                <span className="text-sm md:text-base text-gray-600 dark:text-gray-300">
+                                  Challenged
+                                </span>
+                              </label>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
                 );
@@ -534,9 +598,12 @@ export default function App() {
 
           {/* Towers Section */}
           <div className="scroll-mt-[129px]">
-            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-700 dark:to-indigo-700 rounded-xl border shadow-lg overflow-hidden sticky top-[120px] z-30">
+            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 dark:from-purple-700 dark:via-pink-700 dark:to-purple-700 rounded-xl border shadow-lg overflow-hidden sticky top-[120px] z-30">
               <div className="p-4 border-b border-purple-500/20 dark:border-purple-400/20">
-                <h2 className="text-xl font-bold text-white">Towers</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+                  <FaBroadcastTower className="text-xl md:text-2xl" />
+                  Towers
+                </h2>
               </div>
             </div>
             <div className="mt-4 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -546,16 +613,22 @@ export default function App() {
                   <div
                     key={tower.id}
                     id={`tower-${tower.id}`}
-                    className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700`}
+                    className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${
+                      towerChecklist[tower.id] ? "opacity-50" : ""
+                    }`}
                   >
-                    <label className="flex items-center gap-2">
+                    <label
+                      className={`flex items-center gap-2 ${
+                        towerChecklist[tower.id] ? "opacity-50" : ""
+                      }`}
+                    >
                       <input
                         type="checkbox"
                         checked={!!towerChecklist[tower.id]}
                         onChange={() => toggleTower(tower.id)}
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        className="h-4 w-4 md:h-5 md:w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                       />
-                      <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                      <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-100">
                         {tower.name}
                       </span>
                     </label>
@@ -566,9 +639,12 @@ export default function App() {
 
           {/* World Events Section */}
           <div className="scroll-mt-[129px]">
-            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 rounded-xl border shadow-lg overflow-hidden sticky top-[120px] z-30">
+            <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-700 dark:via-teal-700 dark:to-emerald-700 rounded-xl border shadow-lg overflow-hidden sticky top-[120px] z-30">
               <div className="p-4 border-b border-emerald-500/20 dark:border-emerald-400/20">
-                <h2 className="text-xl font-bold text-white">World Events</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+                  <FaCalendarAlt className="text-xl md:text-2xl" />
+                  World Events
+                </h2>
               </div>
             </div>
             <div className="mt-4 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -583,6 +659,13 @@ export default function App() {
 
                 if (showUntickedOnly && visibleEvents.length === 0) return null;
 
+                const isWorldEventsCompleted = Array.from({
+                  length: world.count,
+                }).every(
+                  (_, index) =>
+                    worldEventChecklist[`${world.worldId}-event-${index}`]
+                );
+
                 return (
                   <div
                     key={world.worldId}
@@ -591,31 +674,44 @@ export default function App() {
                       isDarkMode
                         ? worldColors.dark[world.worldId as WorldId]
                         : worldColors.light[world.worldId as WorldId]
-                    } rounded-lg p-4 shadow-sm hover:shadow-md transition-all backdrop-blur-sm border border-gray-200 dark:border-gray-700`}
+                    } rounded-lg p-4 shadow-sm hover:shadow-md transition-all backdrop-blur-sm border border-gray-200 dark:border-gray-700 ${
+                      isWorldEventsCompleted ? "opacity-50" : ""
+                    }`}
                   >
-                    <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-3">
+                    <h3
+                      className={`font-semibold text-gray-800 dark:text-gray-100 mb-3 text-base md:text-lg ${
+                        isWorldEventsCompleted ? "opacity-50" : ""
+                      }`}
+                    >
                       {worldData?.name} Events
                     </h3>
                     <div className="flex flex-col gap-2">
-                      {visibleEvents.map(({ index }) => (
-                        <label key={index} className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={
-                              !!worldEventChecklist[
-                                `${world.worldId}-event-${index}`
-                              ]
-                            }
-                            onChange={() =>
-                              toggleWorldEvent(world.worldId, index)
-                            }
-                            className="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
-                          />
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
-                            Event {index + 1}
-                          </span>
-                        </label>
-                      ))}
+                      {visibleEvents.map(({ index }) => {
+                        const isEventCompleted =
+                          worldEventChecklist[
+                            `${world.worldId}-event-${index}`
+                          ];
+                        return (
+                          <label
+                            key={index}
+                            className={`flex items-center gap-2 ${
+                              isEventCompleted ? "opacity-50" : ""
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isEventCompleted}
+                              onChange={() =>
+                                toggleWorldEvent(world.worldId, index)
+                              }
+                              className="h-4 w-4 md:h-5 md:w-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                            />
+                            <span className="text-sm md:text-base text-gray-600 dark:text-gray-300">
+                              Event {index + 1}
+                            </span>
+                          </label>
+                        );
+                      })}
                     </div>
                   </div>
                 );
