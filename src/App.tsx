@@ -421,6 +421,9 @@ export default function App() {
             <span className="mt-1 text-lg md:text-2xl font-bold tracking-tight truncate drop-shadow text-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text text-transparent">
               Dungeon Tracker
             </span>
+            <span className="text-xs md:text-base font-medium bg-gradient-to-r from-amber-400 via-orange-500 to-red-400 bg-clip-text text-transparent">
+              Guild Season XV
+            </span>
           </div>
           {/* Right buttons (right) */}
           <div className="flex gap-2 flex-shrink-0 items-center">
