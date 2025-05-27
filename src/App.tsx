@@ -16,6 +16,8 @@ import {
 } from "react-icons/fa";
 import wzLogo from "/wz_logo.png";
 
+const LAST_UPDATED = "27 May 2025";
+
 type DungeonState = {
   normal: boolean;
   challenged: boolean;
@@ -512,17 +514,20 @@ export default function App() {
             </div>
           </nav>
           <footer className="mt-auto mb-2 text-xs text-gray-400 dark:text-gray-500 text-center select-none block sm:hidden">
-            Made with love{" "}
-            <span className="inline-block align-middle text-red-500">❤️</span>{" "}
-            by
-            <a
-              href="https://www.roblox.com/users/4956994994/profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-1 underline hover:text-indigo-600 dark:hover:text-indigo-400"
-            >
-              squalvj
-            </a>
+            <p>
+              Made with love{" "}
+              <span className="inline-block align-middle text-red-500">❤️</span>{" "}
+              by
+              <a
+                href="https://www.roblox.com/users/4956994994/profile"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-1 underline hover:text-indigo-600 dark:hover:text-indigo-400"
+              >
+                squalvj
+              </a>
+            </p>
+            <p className="text-center">Last updated: {LAST_UPDATED}</p>
           </footer>
         </div>
       </div>
@@ -948,16 +953,19 @@ export default function App() {
       </div>
 
       <footer className="mt-auto mb-2 text-xs text-gray-400 dark:text-gray-500 text-center select-none fixed bottom-4 left-4 hidden sm:block">
-        Made with love{" "}
-        <span className="inline-block align-middle text-red-500">❤️</span> by
-        <a
-          href="https://www.roblox.com/users/4956994994/profile"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ml-1 underline hover:text-indigo-600 dark:hover:text-indigo-400"
-        >
-          squalvj
-        </a>
+        <p>
+          Made with love{" "}
+          <span className="inline-block align-middle text-red-500">❤️</span> by
+          <a
+            href="https://www.roblox.com/users/4956994994/profile"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-1 underline hover:text-indigo-600 dark:hover:text-indigo-400"
+          >
+            squalvj
+          </a>
+        </p>
+        <p className="text-left">Last updated: {LAST_UPDATED}</p>
       </footer>
     </div>
   );
