@@ -446,7 +446,7 @@ export default function App() {
           <div className="flex gap-2 flex-shrink-0 items-center">
             <button
               onClick={resetAll}
-              className="bg-gradient-to-r from-red-500/30 to-red-600/30 px-3 py-1 rounded hover:from-red-500/40 hover:to-red-600/40 transition-all duration-300 flex items-center gap-1 text-sm md:text-base hidden sm:flex"
+              className="bg-gradient-to-r from-red-500/30 to-red-600/30 px-3 py-1 rounded hover:from-red-500/40 hover:to-red-600/40 transition-all duration-300 items-center gap-1 text-sm md:text-base hidden sm:flex"
             >
               <FaTrash className="text-sm md:text-base" />
               <span className="hidden sm:inline">Reset All</span>
@@ -458,7 +458,7 @@ export default function App() {
                 confettiEnabled
                   ? "bg-gradient-to-r from-yellow-500/30 to-yellow-600/30 hover:from-yellow-500/40 hover:to-yellow-600/40"
                   : "bg-gradient-to-r from-gray-500/30 to-gray-600/30 hover:from-gray-500/40 hover:to-gray-600/40"
-              } px-3 py-1 rounded transition-all duration-300 flex items-center gap-1 text-sm md:text-base hidden sm:flex`}
+              } px-3 py-1 rounded transition-all duration-300 items-center gap-1 text-sm md:text-base hidden sm:flex`}
             >
               <FaFire className="text-sm md:text-base" />
               <span className="hidden sm:inline">
@@ -467,7 +467,7 @@ export default function App() {
             </button>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="bg-gradient-to-r from-white/30 to-white/40 px-3 py-1 rounded hover:from-white/40 hover:to-white/50 transition-all duration-300 flex items-center gap-1 text-sm md:text-base hidden sm:flex"
+              className="bg-gradient-to-r from-white/30 to-white/40 px-3 py-1 rounded hover:from-white/40 hover:to-white/50 transition-all duration-300 items-center gap-1 text-sm md:text-base hidden sm:flex"
             >
               {isDarkMode ? (
                 <FaSun className="text-sm md:text-base" />
