@@ -36,6 +36,7 @@ const ENGAGING_MESSAGES = [
   "You're crushing it! More dungeons await! ⚔️",
   "Dungeons don't stand a chance against you! 🛡️",
   "You're on fire! Nothing can stop you now! 🔥",
+  "Bosses in the lobby, tryna find a new game. 🎮",
 ];
 
 type DungeonState = {
