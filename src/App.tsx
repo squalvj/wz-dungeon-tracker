@@ -1034,9 +1034,19 @@ export default function App() {
                   <div
                     key={quest.id}
                     id={`guild-quest-${quest.id}`}
-                    className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${
-                      guildQuestChecklist[quest.id] ? "opacity-50" : ""
-                    }`}
+                    className={`${
+                      quest.id === "easy"
+                        ? "bg-green-50 dark:bg-green-900/20"
+                        : quest.id === "medium"
+                        ? "bg-yellow-50 dark:bg-yellow-900/20"
+                        : "bg-red-50 dark:bg-red-900/20"
+                    } backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border ${
+                      quest.id === "easy"
+                        ? "border-green-200 dark:border-green-800"
+                        : quest.id === "medium"
+                        ? "border-yellow-200 dark:border-yellow-800"
+                        : "border-red-200 dark:border-red-800"
+                    } ${guildQuestChecklist[quest.id] ? "opacity-50" : ""}`}
                   >
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
