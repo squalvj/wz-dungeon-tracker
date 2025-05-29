@@ -18,6 +18,7 @@ import {
   FaScroll,
 } from "react-icons/fa";
 import wzLogo from "/wz_logo.png";
+import { Analytics } from "@vercel/analytics/react";
 
 const LAST_UPDATED = "29 May 2025";
 
@@ -1837,6 +1838,8 @@ export default function App() {
           }
         `}
       </style>
+
+      <Analytics />
     </div>
   );
 }
