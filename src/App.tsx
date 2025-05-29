@@ -44,6 +44,12 @@ type DungeonState = {
   challenged: boolean;
 };
 
+type TowerState = {
+  completed: boolean;
+  startFloor?: number;
+  endFloor?: number;
+};
+
 type WorldId = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
 
 // World color mapping
@@ -96,10 +102,22 @@ export default function App() {
   );
 
   const [towerChecklist, setTowerChecklist] = useState<{
-    [key: string]: boolean;
+    [key: string]: TowerState;
   }>(() => {
     const saved = localStorage.getItem("towerTracker");
-    return saved ? JSON.parse(saved) : {};
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const newFormat: { [key: string]: TowerState } = {};
+      Object.entries(parsed).forEach(([key, value]) => {
+        if (typeof value === "boolean") {
+          newFormat[key] = { completed: value };
+        } else {
+          newFormat[key] = value as TowerState;
+        }
+      });
+      return newFormat;
+    }
+    return {};
   });
 
   const [worldEventChecklist, setWorldEventChecklist] = useState<{
@@ -249,7 +267,11 @@ export default function App() {
 
   const isTowerVisible = (towerId: string) => {
     if (!showUntickedOnly) return true;
-    return !towerChecklist[towerId];
+    const tower = towers.find((t) => t.id === towerId);
+    if (tower?.name.toLowerCase().includes("infinite")) {
+      return true; // Always show infinite tower
+    }
+    return !towerChecklist[towerId]?.completed;
   };
 
   const isWorldEventVisible = (worldId: string, eventIndex: number) => {
@@ -299,13 +321,24 @@ export default function App() {
 
   const toggleTower = (towerId: string) => {
     setTowerChecklist((prev) => {
-      const newState = {
-        ...prev,
-        [towerId]: !prev[towerId],
+      const newState = { ...prev };
+      const tower = towers.find((t) => t.id === towerId);
+
+      if (tower?.name.toLowerCase().includes("infinite")) {
+        // For infinite tower, we don't toggle completion
+        return newState;
+      }
+
+      newState[towerId] = {
+        ...newState[towerId],
+        completed: !newState[towerId]?.completed,
       };
 
-      // Check if all towers are now completed
-      const isCompleted = towers.every((tower) => newState[tower.id]);
+      // Check if all non-infinite towers are now completed
+      const isCompleted = towers
+        .filter((tower) => !tower.name.toLowerCase().includes("infinite"))
+        .every((tower) => newState[tower.id]?.completed);
+
       if (isCompleted) {
         triggerCelebration();
         // Add flash effect to all towers
@@ -318,6 +351,22 @@ export default function App() {
         });
       }
 
+      return newState;
+    });
+  };
+
+  const updateInfiniteTowerFloors = (
+    towerId: string,
+    startFloor: number,
+    endFloor: number
+  ) => {
+    setTowerChecklist((prev) => {
+      const newState = { ...prev };
+      newState[towerId] = {
+        ...newState[towerId],
+        startFloor,
+        endFloor,
+      };
       return newState;
     });
   };
@@ -398,7 +447,18 @@ export default function App() {
     });
     let towerPoints = 0;
     towers.forEach((tower) => {
-      if (towerChecklist[tower.id] && !/infinite/i.test(tower.name)) {
+      if (tower.name.toLowerCase().includes("infinite")) {
+        const towerState = towerChecklist[tower.id];
+        if (towerState?.startFloor && towerState?.endFloor) {
+          // Calculate points based on completed floors
+          const startFloor = towerState.startFloor;
+          const endFloor = towerState.endFloor;
+          // Only count floors that are actually passed beyond the 5th floor
+          const completedFloors =
+            Math.floor((endFloor - startFloor - 1) / 5) * 5;
+          towerPoints += completedFloors;
+        }
+      } else if (towerChecklist[tower.id]?.completed) {
         towerPoints += tower.points;
       }
     });
@@ -1368,24 +1428,98 @@ export default function App() {
                     key={tower.id}
                     id={`tower-${tower.id}`}
                     className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${
-                      towerChecklist[tower.id] ? "opacity-50" : ""
+                      towerChecklist[tower.id]?.completed ? "opacity-50" : ""
                     }`}
                   >
-                    <label
-                      className={`flex items-center gap-2 ${
-                        towerChecklist[tower.id] ? "opacity-50" : ""
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={!!towerChecklist[tower.id]}
-                        onChange={() => toggleTower(tower.id)}
-                        className="h-4 w-4 md:h-5 md:w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                      />
-                      <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-100">
-                        {tower.name}
-                      </span>
-                    </label>
+                    {tower.name.toLowerCase().includes("infinite") ? (
+                      <div className="flex flex-col gap-3">
+                        <h3 className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-100">
+                          {tower.name}
+                        </h3>
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-2">
+                            <label className="text-sm text-gray-600 dark:text-gray-400">
+                              Start Floor:
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              value={towerChecklist[tower.id]?.startFloor || ""}
+                              onChange={(e) => {
+                                const startFloor =
+                                  parseInt(e.target.value) || 0;
+                                const endFloor =
+                                  towerChecklist[tower.id]?.endFloor ||
+                                  startFloor;
+                                updateInfiniteTowerFloors(
+                                  tower.id,
+                                  startFloor,
+                                  endFloor
+                                );
+                              }}
+                              className="w-20 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+                            />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <label className="text-sm text-gray-600 dark:text-gray-400">
+                              End Floor:
+                            </label>
+                            <input
+                              type="number"
+                              min={towerChecklist[tower.id]?.startFloor || 0}
+                              value={towerChecklist[tower.id]?.endFloor || ""}
+                              onChange={(e) => {
+                                const endFloor = parseInt(e.target.value) || 0;
+                                const startFloor =
+                                  towerChecklist[tower.id]?.startFloor || 0;
+                                updateInfiniteTowerFloors(
+                                  tower.id,
+                                  startFloor,
+                                  endFloor
+                                );
+                              }}
+                              className="w-20 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+                            />
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            Points:{" "}
+                            {(() => {
+                              const startFloor =
+                                towerChecklist[tower.id]?.startFloor || 0;
+                              const endFloor =
+                                towerChecklist[tower.id]?.endFloor || 0;
+                              // Only count floors that are actually passed beyond the 5th floor
+                              const completedFloors =
+                                Math.floor((endFloor - startFloor - 1) / 5) * 5;
+
+                              if (startFloor === 0 || endFloor === 0) {
+                                return 0;
+                              }
+
+                              return Math.max(0, completedFloors);
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <label
+                        className={`flex items-center gap-2 ${
+                          towerChecklist[tower.id]?.completed
+                            ? "opacity-50"
+                            : ""
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={!!towerChecklist[tower.id]?.completed}
+                          onChange={() => toggleTower(tower.id)}
+                          className="h-4 w-4 md:h-5 md:w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        />
+                        <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-100">
+                          {tower.name}
+                        </span>
+                      </label>
+                    )}
                   </div>
                 ))}
             </div>
