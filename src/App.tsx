@@ -20,7 +20,7 @@ import {
 import wzLogo from "/wz_logo.png";
 import { Analytics } from "@vercel/analytics/react";
 
-const LAST_UPDATED = "29 May 2025";
+const LAST_UPDATED = "30 May 2025";
 
 const ENGAGING_MESSAGES = [
   "Hey there! Ready to conquer some dungeons? 💪",
@@ -1324,11 +1324,42 @@ export default function App() {
                             }`}
                           >
                             <h4
-                              className={`font-semibold text-gray-800 dark:text-gray-100 mb-3 text-base md:text-lg ${
+                              className={`font-semibold text-gray-800 dark:text-gray-100 mb-3 text-base md:text-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 ${
                                 isDungeonCompleted ? "opacity-50" : ""
                               }`}
                             >
-                              {dungeon.name}
+                              <span>{dungeon.name}</span>
+                              <button
+                                type="button"
+                                className={`px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
+                                  isDungeonCompleted ? "opacity-70" : ""
+                                }`}
+                                onClick={() => {
+                                  const isCompleted =
+                                    checklist[dungeon.id]?.normal &&
+                                    checklist[dungeon.id]?.challenged;
+                                  setChecklist((prev) => ({
+                                    ...prev,
+                                    [dungeon.id]: {
+                                      normal: !isCompleted,
+                                      challenged: !isCompleted,
+                                    },
+                                  }));
+                                  if (!isCompleted) triggerCelebration();
+                                }}
+                                aria-label={
+                                  checklist[dungeon.id]?.normal &&
+                                  checklist[dungeon.id]?.challenged
+                                    ? "Uncheck both difficulties"
+                                    : "Check both difficulties"
+                                }
+                              >
+                                <FaCheckSquare />
+                                {checklist[dungeon.id]?.normal &&
+                                checklist[dungeon.id]?.challenged
+                                  ? "Uncheck All"
+                                  : "Check All"}
+                              </button>
                             </h4>
                             <div className="flex flex-col gap-3">
                               <label
