@@ -1275,7 +1275,32 @@ export default function App() {
                               : ""
                           }`}
                         >
-                          {world.name}
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span>{world.name}</span>
+                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                              (
+                              {world.dungeons.reduce(
+                                (acc, dungeon) =>
+                                  acc +
+                                  (checklist[dungeon.id]?.normal
+                                    ? dungeon.pointsNormal
+                                    : 0) +
+                                  (checklist[dungeon.id]?.challenged
+                                    ? dungeon.pointsChallenged
+                                    : 0),
+                                0
+                              )}
+                              /
+                              {world.dungeons.reduce(
+                                (acc, dungeon) =>
+                                  acc +
+                                  dungeon.pointsNormal +
+                                  dungeon.pointsChallenged,
+                                0
+                              )}{" "}
+                              pts)
+                            </span>
+                          </div>
                         </h3>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                           <div
