@@ -1054,6 +1054,21 @@ export default function App() {
                   <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-yellow-200 to-amber-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     <FaScroll className="text-xl md:text-2xl text-amber-100 dark:text-amber-200" />
                     Guild Quests
+                    <span className="text-sm md:text-base font-normal text-amber-100/70 dark:text-amber-200/70">
+                      (
+                      {guildQuests.reduce(
+                        (acc, quest) =>
+                          acc +
+                          (guildQuestChecklist[quest.id] ? quest.points : 0),
+                        0
+                      )}
+                      /
+                      {guildQuests.reduce(
+                        (acc, quest) => acc + quest.points,
+                        0
+                      )}{" "}
+                      pts)
+                    </span>
                   </h2>
                   <div className="text-sm md:text-base bg-gradient-to-r from-white via-yellow-200 to-amber-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     {(() => {
@@ -1147,6 +1162,39 @@ export default function App() {
                   <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     <FaDungeon className="text-xl md:text-2xl text-blue-100 dark:text-blue-200" />
                     Dungeons
+                    <span className="text-sm md:text-base font-normal text-blue-100/70 dark:text-blue-200/70">
+                      (
+                      {worlds.reduce(
+                        (acc, world) =>
+                          acc +
+                          world.dungeons.reduce(
+                            (dungeonAcc, dungeon) =>
+                              dungeonAcc +
+                              (checklist[dungeon.id]?.normal
+                                ? dungeon.pointsNormal
+                                : 0) +
+                              (checklist[dungeon.id]?.challenged
+                                ? dungeon.pointsChallenged
+                                : 0),
+                            0
+                          ),
+                        0
+                      )}
+                      /
+                      {worlds.reduce(
+                        (acc, world) =>
+                          acc +
+                          world.dungeons.reduce(
+                            (dungeonAcc, dungeon) =>
+                              dungeonAcc +
+                              dungeon.pointsNormal +
+                              dungeon.pointsChallenged,
+                            0
+                          ),
+                        0
+                      )}{" "}
+                      pts)
+                    </span>
                   </h2>
                   <div className="text-sm md:text-base bg-gradient-to-r from-white via-blue-200 to-blue-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     {(() => {
@@ -1328,7 +1376,22 @@ export default function App() {
                                 isDungeonCompleted ? "opacity-50" : ""
                               }`}
                             >
-                              <span>{dungeon.name}</span>
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                <span>{dungeon.name}</span>
+                                <span className="text-sm text-gray-600 dark:text-gray-400">
+                                  (
+                                  {(checklist[dungeon.id]?.normal
+                                    ? dungeon.pointsNormal
+                                    : 0) +
+                                    (checklist[dungeon.id]?.challenged
+                                      ? dungeon.pointsChallenged
+                                      : 0)}
+                                  /
+                                  {dungeon.pointsNormal +
+                                    dungeon.pointsChallenged}{" "}
+                                  pts)
+                                </span>
+                              </div>
                               <button
                                 type="button"
                                 className={`px-2 py-1 rounded text-xs md:text-sm font-medium flex items-center gap-1 border border-gray-300 dark:border-gray-600 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-800 dark:to-green-600 text-green-900 dark:text-green-100 hover:from-green-300 hover:to-green-500 dark:hover:from-green-700 dark:hover:to-green-500 transition-all ${
@@ -1419,6 +1482,30 @@ export default function App() {
                   <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     <FaChessRook className="text-xl md:text-2xl text-purple-100 dark:text-purple-200" />
                     Towers
+                    <span className="text-sm md:text-base font-normal text-purple-100/70 dark:text-purple-200/70">
+                      (
+                      {towers
+                        .filter(
+                          (tower) =>
+                            !tower.name.toLowerCase().includes("infinite")
+                        )
+                        .reduce(
+                          (acc, tower) =>
+                            acc +
+                            (towerChecklist[tower.id]?.completed
+                              ? tower.points
+                              : 0),
+                          0
+                        )}
+                      /
+                      {towers
+                        .filter(
+                          (tower) =>
+                            !tower.name.toLowerCase().includes("infinite")
+                        )
+                        .reduce((acc, tower) => acc + tower.points, 0)}{" "}
+                      pts)
+                    </span>
                   </h2>
                   <div className="text-sm md:text-base bg-gradient-to-r from-white via-pink-200 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     {(() => {
@@ -1565,6 +1652,31 @@ export default function App() {
                   <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     <FaCalendarAlt className="text-xl md:text-2xl text-emerald-100 dark:text-emerald-200" />
                     World Events
+                    <span className="text-sm md:text-base font-normal text-emerald-100/70 dark:text-emerald-200/70">
+                      (
+                      {worldEvents.reduce(
+                        (acc: number, world) =>
+                          acc +
+                          Array.from({ length: world.count }).reduce(
+                            (eventAcc: number, _, index) =>
+                              eventAcc +
+                              (worldEventChecklist[
+                                `${world.worldId}-event-${index}`
+                              ]
+                                ? world.points
+                                : 0),
+                            0
+                          ),
+                        0
+                      )}
+                      /
+                      {worldEvents.reduce(
+                        (acc: number, world) =>
+                          acc + world.points * world.count,
+                        0
+                      )}{" "}
+                      pts)
+                    </span>
                   </h2>
                   <div className="text-sm md:text-base bg-gradient-to-r from-white via-teal-200 to-emerald-100 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                     {(() => {
