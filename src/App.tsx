@@ -20,7 +20,7 @@ import {
 import wzLogo from "/wz_logo.png";
 import { Analytics } from "@vercel/analytics/react";
 
-const LAST_UPDATED = "30 May 2025";
+const LAST_UPDATED = "15 Jun 2025";
 
 const ENGAGING_MESSAGES = [
   "Hey there! Ready to conquer some dungeons? 💪",
@@ -142,8 +142,55 @@ export default function App() {
   const [showUntickedOnly, setShowUntickedOnly] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [confettiEnabled, setConfettiEnabled] = useState(() => {
-    return localStorage.getItem("confettiEnabled") !== "false";
+    const saved = localStorage.getItem("confettiEnabled");
+    return saved ? saved === "true" : true;
   });
+
+  // Price calculator states
+  const [originalPrice, setOriginalPrice] = useState<number>(0);
+  const [finalPrice, setFinalPrice] = useState<number>(0);
+
+  // Format number with thousand separators
+  const formatNumber = (num: number): string => {
+    return num.toLocaleString("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  };
+
+  // Parse formatted number string back to number
+  const parseFormattedNumber = (str: string): number => {
+    return parseInt(str.replace(/\./g, "")) || 0;
+  };
+
+  // Calculate final price with 10% reduction
+  const calculateFinalPrice = (price: number) => {
+    const reduction = price * 0.1;
+    return price - reduction;
+  };
+
+  // Calculate original price from final price
+  const calculateOriginalPrice = (finalPrice: number) => {
+    return finalPrice / 0.9;
+  };
+
+  // Handle original price change
+  const handleOriginalPriceChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rawValue = e.target.value.replace(/[^\d]/g, "");
+    const price = parseFormattedNumber(rawValue);
+    setOriginalPrice(price);
+    setFinalPrice(calculateFinalPrice(price));
+  };
+
+  // Handle final price change
+  const handleFinalPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/[^\d]/g, "");
+    const price = parseFormattedNumber(rawValue);
+    setFinalPrice(price);
+    setOriginalPrice(calculateOriginalPrice(price));
+  };
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(ENGAGING_MESSAGES[0]);
@@ -805,6 +852,45 @@ export default function App() {
                     {showUntickedOnly
                       ? "Showing incomplete items"
                       : "Showing all items"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Price Calculator Section */}
+          <div className="w-full flex justify-start items-center gap-4 mb-4">
+            <div className="relative rounded-xl shadow-lg px-8 py-6 flex flex-col gap-6 text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 border-2 border-transparent overflow-hidden bg-gradient-to-r from-green-200 via-emerald-200 to-green-200 dark:from-green-900 dark:via-emerald-900 dark:to-green-900">
+              <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+                WZ Price Calculator
+              </h2>
+              <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
+                <div className="flex flex-col gap-2 w-full sm:w-1/2">
+                  <label className="text-gray-700 dark:text-gray-300 text-base font-medium">
+                    Item Price
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formatNumber(originalPrice)}
+                      onChange={handleOriginalPriceChange}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                      placeholder="Enter original price"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 w-full sm:w-1/2">
+                  <label className="text-gray-700 dark:text-gray-300 text-base font-medium">
+                    Item Price After Tax (10% off)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formatNumber(finalPrice)}
+                      onChange={handleFinalPriceChange}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                      placeholder="Enter final price"
+                    />
                   </div>
                 </div>
               </div>
