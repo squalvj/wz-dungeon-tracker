@@ -20,7 +20,7 @@ import {
 import wzLogo from "/wz_logo.png";
 import { Analytics } from "@vercel/analytics/react";
 
-const LAST_UPDATED = "15 Jun 2025";
+const LAST_UPDATED = "25 Jul 2025";
 
 const ENGAGING_MESSAGES = [
   "Hey there! Ready to conquer some dungeons? 💪",
@@ -630,7 +630,7 @@ export default function App() {
               Dungeon Tracker
             </span>
             <span className="text-xs md:text-base font-medium bg-gradient-to-r from-amber-400 via-orange-500 to-red-400 bg-clip-text text-transparent">
-              Guild Season XV
+              Guild Season XVI
             </span>
           </div>
           {/* Right buttons (right) */}
